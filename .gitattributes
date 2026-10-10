@@ -1,0 +1,4 @@
+# Addon 里的 patch_0 是二进制容器，绝对不能被改写
+* text=auto eol=lf
+Addon/*.patch_0 binary
+*.patch_0 binary
