@@ -1,4 +1,4 @@
-# hd2list —— 绝地潜兵 2 玩家名册抓取插件（v21.2）
+# HD2Tracker —— 绝地潜兵 2 玩家名册抓取插件（v21.2）
 
 装进游戏，把**「这一局队里有谁」**写成一行行 JSON 到本机日志文件：
 
@@ -26,6 +26,9 @@
 **本仓库只放可安装的产物与说明**：`Addon\`（部署进游戏的资源文件）、`manifest.json`（模组元数据）、
 `README.md`、`LICENSE`。开发工程（源码、构建脚本、设计文档）不在公开仓库里。
 
+> 开发期这个插件叫 `hd2list`，所以你在加载器日志里会看到 `mods/hd2list/watch` ——
+> 那是**注册路径**（改了就等于变成另一个 mod），与显示名 `HD2Tracker` 无关，不影响使用。
+
 ---
 
 ## 依赖与前置
@@ -40,7 +43,7 @@
 
 1. **关掉游戏**（加载器只在启动时读一次模组目录）
 2. 取插件包，两种都行：
-   - 从 [Releases](../../releases) 下载 `HD2List-v21.2.zip`（推荐，直接给管理器导入）；
+   - 从 [Releases](../../releases) 下载 `HD2Tracker-v21.2.zip`（推荐，直接给管理器导入）；
    - 或者直接用本仓库里的 `Addon\` + `manifest.json` —— 这两个就是那个 zip 里的内容。
 3. 用 Arsenal / HD2MM **导入**
 4. 如果装过旧的 `kick_steamid_tracker`：**把它禁用** —— 本插件是它的替代品，
@@ -48,8 +51,8 @@
 5. 确认 **Bingus Shared Loader 仍在启用**，然后 **Purge & Deploy**
 6. 启动游戏，验三处：
    - `%LOCALAPPDATA%\CowboyBingus\Helldivers2\Logs\` 下出现 `playerLog.txt` 与 `playerLog.log`
-   - `playerLog.log` 里有 `hd2list hd2listv21.2 启动（STAGE=3）` 与自检结果
-   - 加载器日志（`BingusSharedLoader.log`）最后几行是 `mods/hd2list/watch: loaded`
+   - `playerLog.log` 里有 `HD2Tracker hd2trackerv21.2 启动（STAGE=3）` 与自检结果
+   - 加载器日志（`BingusSharedLoader.log`）最后几行是 `mods/HD2Tracker/watch: loaded`
      —— 若是 `load failed: …` 就会带 Lua 行号，能直接定位问题
 
 进对局后 `playerLog.txt` 里就会出现 `file_start` / `match_start` / `join` / `squad` 等记录。
@@ -73,22 +76,22 @@
 一个玩家进队、名字补上、再离开，是这样四行（id 与名字都是占位值）：
 
 ```json
-{"v":2,"mod":"hd2listv21.2","ev":"join","capture_id":"1111222233334444","ts":"2026-10-07T14:26:21Z",
+{"v":2,"mod":"hd2trackerv21.2","ev":"join","capture_id":"1111222233334444","ts":"2026-10-07T14:26:21Z",
  "ts_local":"2026-10-07 22:26:21","game_pid":12345,"game_exe":"D:\\…\\helldivers2.exe","trigger":"join",
  "peer_id_hex":"AABBCCDD00112233","is_self":false,"name":null,"name_src":"unresolved",
  "active_peers":2,"peers":null,"squad":null,"self_name":null,"note":null}
 
-{"v":2,"mod":"hd2listv21.2","ev":"squad","capture_id":"1111222233334445","ts":"2026-10-07T14:26:22Z",
+{"v":2,"mod":"hd2trackerv21.2","ev":"squad","capture_id":"1111222233334445","ts":"2026-10-07T14:26:22Z",
  "ts_local":"2026-10-07 22:26:22","game_pid":12345,"game_exe":"D:\\…\\helldivers2.exe","trigger":"roster",
  "peer_id_hex":null,"is_self":false,"name":null,"name_src":"unresolved","active_peers":2,"peers":null,
  "squad":"1122334455667788=PlayerA;AABBCCDD00112233=MyName","self_name":null,"note":"名册：2 人"}
 
-{"v":2,"mod":"hd2listv21.2","ev":"update","capture_id":"1111222233334446","ts":"2026-10-07T14:26:24Z",
+{"v":2,"mod":"hd2trackerv21.2","ev":"update","capture_id":"1111222233334446","ts":"2026-10-07T14:26:24Z",
  "ts_local":"2026-10-07 22:26:24","game_pid":12345,"game_exe":"D:\\…\\helldivers2.exe","trigger":"roster",
  "peer_id_hex":"AABBCCDD00112233","is_self":false,"name":"PlayerA","name_src":"roster",
  "active_peers":2,"peers":null,"squad":null,"self_name":null,"note":"名字来自名册（补）"}
 
-{"v":2,"mod":"hd2listv21.2","ev":"leave","capture_id":"1111222233334447","ts":"2026-10-07T14:31:02Z",
+{"v":2,"mod":"hd2trackerv21.2","ev":"leave","capture_id":"1111222233334447","ts":"2026-10-07T14:31:02Z",
  "ts_local":"2026-10-07 22:31:02","game_pid":12345,"game_exe":"D:\\…\\helldivers2.exe","trigger":"left",
  "peer_id_hex":"AABBCCDD00112233","is_self":false,"name":"PlayerA","name_src":"roster",
  "active_peers":1,"peers":null,"squad":null,"self_name":null,"note":null}
@@ -99,7 +102,7 @@
 | 字段 | 类型 | 什么时候有值 | 含义 |
 |---|---|---|---|
 | `v` | 数字 | 恒有 | JSON 结构版本，恒为 `2` |
-| `mod` | 字符串 | 恒有 | 写这行的插件版本，如 `hd2listv21.2` |
+| `mod` | 字符串 | 恒有 | 写这行的插件版本，如 `hd2trackerv21.2` |
 | `ev` | 字符串 | 恒有 | 事件类型（见下） |
 | `capture_id` | 16 位十进制字符串 | 恒有 | **本行唯一 ID**（进程内自增）→ 消费方拿它幂等去重 |
 | `ts` / `ts_local` | 字符串 | 恒有 | UTC / 本地时间 |

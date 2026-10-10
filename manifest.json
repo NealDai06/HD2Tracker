@@ -1,11 +1,11 @@
 {
   "Version": 1,
   "Guid": "7b1cf0d2-9a44-4f1e-8c53-0d6e2f9b41aa",
-  "Name": "HD2 Blacklist Watcher (hd2list v21.2)",
+  "Name": "HD2Tracker v21.2",
   "Description": "事件驱动抓取：有玩家加入/离开对局时自动记录其游戏内账号 ID（peer id）与玩家名，按 [ 可手动抓取当前全队。写入 playerLog.txt（%LOCALAPPDATA%\\CowboyBingus\\Helldivers2\\Logs）。需要 Bingus Shared Loader v15+（API 1）。会替代旧的 kick_steamid_tracker，请不要同时启用两者（两者会往同一个日志目录里写）。",
   "Options": [
     {
-      "Name": "HD2 Blacklist Watcher (hd2list v21.2)",
+      "Name": "HD2Tracker v21.2",
       "Description": "事件驱动抓取（加入/离开自动抓；[ 手动抓全队）。需要 Bingus Shared Loader v15+。",
       "Include": [
         "Addon"
